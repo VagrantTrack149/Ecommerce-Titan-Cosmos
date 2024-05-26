@@ -1,11 +1,21 @@
 import { getconnection } from "../database/connection.js";
 import sql from 'mssql'
 //select
-export const getProductos = async (req,res)=>{
-    const pool =await getconnection()
-    const result = await pool.request().query('Select * from categorias')
-    return res.json(result.recordset)
+export const getProductos = async (req, res) => {
+    try {
+        const pool = await getconnection();
+        console.log('Conexión establecida correctamente');
+        const result = await pool.request().query('Select * from categorias');
+        console.log('Consulta SQL ejecutada correctamente');
+        console.log('Datos obtenidos:', result.recordset);
+        res.render('categorias', { productos: result.recordset }); // Renderiza la vista 'categorias.ejs' con los datos obtenidos
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).send('Error al obtener productos: ' + error.message);
+    }
 }
+
+
 //select con where
 export const getProducto = async (req,res)=>{
     const pool= await getconnection()

@@ -1,0 +1,231 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pantalla inicio</title>
+    <link rel="shortcut icon" href="images/tinywow_change_bg_photo_55644443.png" />
+    <link rel="stylesheet" href="/css/Style/Index.css">
+    <script src="https://kit.fontawesome.com/d00178e030.js" crossorigin="anonymous"></script>
+</head>
+  <body>
+    <!--navbar para buscar, usuario y carrito-->
+    <nav class="menu">
+        <ul>
+          <li><a href="#Home"><img src="/images/logo.png" style="width:60px;"></a></li>
+          <li>
+            <form action="buscar" method="get">
+                <input type="text" name="Buscador" id="Buscador" placeholder="Buscador" style="width: 500px; color: black;"> <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+         </li>
+                <li><a href="#Usuario"><i class="fa-solid fa-user"></i></a></li>
+          <li><a href="#Carrito"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        </ul>
+      </nav>
+      <!--navbar fin-->
+      <!--cuerpo de la pagina-->
+      
+        <div class="Categorias">
+            <% productos.forEach(producto => { %>
+                <a href="<%= producto.Categoria %>""><%= producto.Categoria %></a> 
+            <% }); %>           
+        </div>
+        <!--Banner-->
+      <div class="Contenedor">
+        <h1>¡Somos Titan Cosmos!</h1>
+            <span>
+                Bienvenidos a Titan Cosmos, una empresa líder en el mundo de la tecnología. 
+                Nos apasiona la innovación y nos dedicamos a ofrecer soluciones tecnológicas integrales que abarcan desde el desarrollo hasta la venta de productos de alta tecnología. 
+                Nuestro compromiso es brindar a nuestros clientes lo mejor en calidad y servicio. 
+                En Titan Cosmos, encontrarás una amplia gama de productos.
+                <br><br>
+                Explora nuestro catálogo y descubre todo lo que Titan Cosmos tiene para ofrecerte. Estamos aquí para ayudarte a encontrar las soluciones tecnológicas perfectas para tu hogar, oficina o negocio. ¡Gracias por confiar en nosotros!
+            </span>
+      </div>
+      <!--Banner fin-->
+        <h3>Productos:</h3>
+        <div class="Productos">
+            <a href="Producto 1">
+                <div class="pro_individual">
+                <img src="images/celular-samsung-a54-6-4-2.jpg" alt="">
+                <h4>Producto 1</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 2">
+                <div class="pro_individual">
+                <img src="images/61ASC9aF8KL._AC_UF894,1000_QL80_.jpg" alt="">
+                <h4>Producto 2</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 3">
+                <div class="pro_individual">
+                <img src="images/71NzegT2VTL.jpg" alt="">
+                <h4>Producto 3</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 4">
+                <div class="pro_individual">
+                <img src="images/71WX6wVepIL.jpg" alt="">
+                <h4>Producto 4</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 1">
+                <div class="pro_individual">
+                <img src="images/celular-samsung-a54-6-4-2.jpg" alt="">
+                <h4>Producto 1</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 2">
+                <div class="pro_individual">
+                <img src="images/61ASC9aF8KL._AC_UF894,1000_QL80_.jpg" alt="">
+                <h4>Producto 2</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 3">
+                <div class="pro_individual">
+                <img src="images/71NzegT2VTL.jpg" alt="">
+                <h4>Producto 3</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 4">
+                <div class="pro_individual">
+                <img src="images/71WX6wVepIL.jpg" alt="">
+                <h4>Producto 4</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 1">
+                <div class="pro_individual">
+                <img src="images/celular-samsung-a54-6-4-2.jpg" alt="">
+                <h4>Producto 1</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 2">
+                <div class="pro_individual">
+                <img src="images/61ASC9aF8KL._AC_UF894,1000_QL80_.jpg" alt="">
+                <h4>Producto 2</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 3">
+                <div class="pro_individual">
+                <img src="images/71NzegT2VTL.jpg" alt="">
+                <h4>Producto 3</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 4">
+                <div class="pro_individual">
+                <img src="images/71WX6wVepIL.jpg" alt="">
+                <h4>Producto 4</h4>
+                $54.99
+                </div>
+            </a>
+        </div>
+    <h3>Productos Oferta:</h3>
+        <div class="Productos_oferta">
+            <a href="Producto 1">
+                <div class="pro_individual">
+                <img src="images/celular-samsung-a54-6-4-2.jpg" alt="">
+                <h4>Producto 1</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 2">
+                <div class="pro_individual">
+                <img src="images/61ASC9aF8KL._AC_UF894,1000_QL80_.jpg" alt="">
+                <h4>Producto 2</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 3">
+                <div class="pro_individual">
+                <img src="images/71NzegT2VTL.jpg" alt="">
+                <h4>Producto 3</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 4">
+                <div class="pro_individual">
+                <img src="images/71WX6wVepIL.jpg" alt="">
+                <h4>Producto 4</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 1">
+                <div class="pro_individual">
+                <img src="images/celular-samsung-a54-6-4-2.jpg" alt="">
+                <h4>Producto 1</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 2">
+                <div class="pro_individual">
+                <img src="images/61ASC9aF8KL._AC_UF894,1000_QL80_.jpg" alt="">
+                <h4>Producto 2</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 3">
+                <div class="pro_individual">
+                <img src="images/71NzegT2VTL.jpg" alt="">
+                <h4>Producto 3</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 4">
+                <div class="pro_individual">
+                <img src="images/71WX6wVepIL.jpg" alt="">
+                <h4>Producto 4</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 1">
+                <div class="pro_individual">
+                <img src="images/celular-samsung-a54-6-4-2.jpg" alt="">
+                <h4>Producto 1</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 2">
+                <div class="pro_individual">
+                <img src="images/61ASC9aF8KL._AC_UF894,1000_QL80_.jpg" alt="">
+                <h4>Producto 2</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 3">
+                <div class="pro_individual">
+                <img src="images/71NzegT2VTL.jpg" alt="">
+                <h4>Producto 3</h4>
+                $54.99
+                </div>
+            </a>
+            <a href="Producto 4">
+                <div class="pro_individual">
+                <img src="images/71WX6wVepIL.jpg" alt="">
+                <h4>Producto 4</h4>
+                $54.99
+                </div>
+            </a>
+        </div>    
+      <!--cuerpo de la pagina fin-->
+      <!--Pagin fin-->
+      <div class="fin_pagina">
+        <span> <sTRONg>Datos de contacto:</sTRONg>
+            <br>
+            Telefono: 0 12345 6789
+            <br>
+            Correo: correo@correo.com
+        </span>
+    <!--Pagin fin fin-->
+      </div>
+  </body>
+</html>
