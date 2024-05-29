@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pantalla inicio</title>
-    <link rel="shortcut icon" href="images/tinywow_change_bg_photo_55644443.png" />
+    <title>Titan Cosmos</title>
+    <link rel="shortcut icon" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/Style/Index.css">
     <script src="https://kit.fontawesome.com/d00178e030.js" crossorigin="anonymous"></script>
   </head>
@@ -12,7 +12,7 @@
     <!--navbar para buscar, usuario y carrito-->
     <nav class="menu">
       <ul>
-        <li><a href="#Home"><img src="/images/logo.png" style="width:60px;"></a></li>
+        <li><a href="/"><img src="/images/logo.png" style="width:60px;"></a></li>
         <li>
           <form action="buscar" method="get">
             <input type="text" name="Buscador" id="Buscador" placeholder="Buscador" style="width: 500px; color: black;">
@@ -27,7 +27,7 @@
     <!--cuerpo de la pagina-->
     <div class="Categorias">
         <% categorias.forEach(categoria => { %>
-          <a href="/categorias/<%= categoria.idCategoria %>"><%= categoria.Categoria %></a>
+          <a href="/categoria/<%= categoria.idCategoria %>"><%= categoria.Categoria %></a>
         <% }); %>
     </div>
     <!--Banner-->
@@ -46,7 +46,7 @@
     <h3>Productos:</h3>
     <div class="Productos">
         <% productos.forEach(producto => { %>
-          <a href="/productos/<%= producto.idProducto %>">
+          <a href="/producto/<%= producto.idProducto %>">
             <div class="pro_individual">
               <img src="/images/logo.png" alt="">
               <h4><%= producto.Producto %></h4>
@@ -58,7 +58,8 @@
     <h3>Productos en oferta:</h3>
         <div class="Productos_oferta">
             <% productosOferta.forEach(producto => { %>
-            <a href="/productos/<%= producto.idProducto %>">
+                
+            <a href="/producto/<%= producto.idProducto %>">
             <div class="pro_individual">
                 <img src="/images/logo.png" alt="">
                 <h4><%= producto.Producto %></h4>

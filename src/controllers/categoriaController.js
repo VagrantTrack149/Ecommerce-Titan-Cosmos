@@ -17,7 +17,7 @@ export const getCategoria = async (id) => {
         const pool = await getconnection();
         const result = await pool.request()
             .input('id', sql.Int, id)
-            .query('SELECT * FROM productos WHERE idCategoria = @id');
+            .query('SELECT * FROM Productos INNER JOIN Categorias ON Productos.idCategoria = Categorias.idCategoria WHERE Categorias.idCategoria = @id');
         return result.recordset;
     } catch (error) {
         console.error('Error al obtener productos:', error);

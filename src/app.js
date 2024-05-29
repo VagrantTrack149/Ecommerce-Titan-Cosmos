@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.static('D:/Documentos/Sistemas de información/NodeJS prueba final si no a php/src/public/'));
 // Rutas
 app.use('/', inicioRoutes);
-app.use('/categorias', categoriaRoutes);
-app.use('/productos', productsRoutes);
+//app.use('/categorias', categoriaRoutes);
+//app.use('/productos', productsRoutes);
 
 export default app;
