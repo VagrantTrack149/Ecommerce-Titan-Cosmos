@@ -1,10 +1,36 @@
-import { Router } from 'express'
-import { eliminandoProducto, getProductos, getProducto, nuevoProducto, ActualizandoProducto } from '../controllers/products.controllers.js'
-const router = Router()
+import { Router } from 'express';
+import { getProductos, getProducto, getProductos_enoferta } from '../controllers/products.controllers.js';
 
-router.get('/categorias', getProductos);
-router.get('/categorias/:id', getProducto);
-router.post('/categorias/', nuevoProducto);
-router.put('/categorias/:id', ActualizandoProducto);
-router.delete('/categorias/:id', eliminandoProducto);
-export default router
+const router = Router();
+
+router.get('/', async (req, res) => {
+    try {
+        const productos = await getProductos();
+        res.json(productos);
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).send('Error al obtener productos: ' + error.message);
+    }
+});
+
+router.get('/', async (req, res) => {
+    try {
+        const productosOferta = await getProductos_enoferta();
+        res.json(productosOferta);
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).send('Error al obtener productos: ' + error.message);
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const producto = await getProducto(req.params.id);
+        res.json(producto);
+    } catch (error) {
+        console.error('Error al obtener producto:', error);
+        res.status(500).send('Error al obtener producto: ' + error.message);
+    }
+});
+
+export default router;

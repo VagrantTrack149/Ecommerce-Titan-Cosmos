@@ -25,8 +25,8 @@
       <!--cuerpo de la pagina-->
       
         <div class="Categorias">
-            <% productos.forEach(producto => { %>
-                <a href="<%= producto.Categoria %>""><%= producto.Categoria %></a> 
+            <% Categorias.forEach(Categoria => { %>
+                <a href="<%= producto.Categoria %>"><%= Categoria.Categoria %></a> 
             <% }); %>           
         </div>
         <!--Banner-->
@@ -44,51 +44,57 @@
       <!--Banner fin-->
         <h3>Productos:</h3>
         <div class="Productos">
-            <a href="Producto 1">
+            <% Productos.forEach(producto=> { %>)
                 <div class="pro_individual">
-                <img src="images/celular-samsung-a54-6-4-2.jpg" alt="">
+                    <img src="/images/logo.png" alt="">
+                <h4> <%= producto.producto %> </h4>
+                </div>
+                <% }); %>
+            <a href="#Producto 1">
+                <div class="pro_individual">
+                <img src="/images/celular-samsung-a54-6-4-2.jpg" alt="">
                 <h4>Producto 1</h4>
                 $54.99
                 </div>
             </a>
             <a href="Producto 2">
                 <div class="pro_individual">
-                <img src="images/61ASC9aF8KL._AC_UF894,1000_QL80_.jpg" alt="">
+                <img src="/images/61ASC9aF8KL._AC_UF894,1000_QL80_.jpg" alt="">
                 <h4>Producto 2</h4>
                 $54.99
                 </div>
             </a>
             <a href="Producto 3">
                 <div class="pro_individual">
-                <img src="images/71NzegT2VTL.jpg" alt="">
+                <img src="/images/71NzegT2VTL.jpg" alt="">
                 <h4>Producto 3</h4>
                 $54.99
                 </div>
             </a>
             <a href="Producto 4">
                 <div class="pro_individual">
-                <img src="images/71WX6wVepIL.jpg" alt="">
+                <img src="/images/71WX6wVepIL.jpg" alt="">
                 <h4>Producto 4</h4>
                 $54.99
                 </div>
             </a>
             <a href="Producto 1">
                 <div class="pro_individual">
-                <img src="images/celular-samsung-a54-6-4-2.jpg" alt="">
+                <img src="/images/celular-samsung-a54-6-4-2.jpg" alt="">
                 <h4>Producto 1</h4>
                 $54.99
                 </div>
             </a>
             <a href="Producto 2">
                 <div class="pro_individual">
-                <img src="images/61ASC9aF8KL._AC_UF894,1000_QL80_.jpg" alt="">
+                <img src="/images/61ASC9aF8KL._AC_UF894,1000_QL80_.jpg" alt="">
                 <h4>Producto 2</h4>
                 $54.99
                 </div>
             </a>
             <a href="Producto 3">
                 <div class="pro_individual">
-                <img src="images/71NzegT2VTL.jpg" alt="">
+                <img src="/images/71NzegT2VTL.jpg" alt="">
                 <h4>Producto 3</h4>
                 $54.99
                 </div>

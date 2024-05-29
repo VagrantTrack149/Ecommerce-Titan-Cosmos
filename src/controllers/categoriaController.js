@@ -1,39 +1,27 @@
 import { getconnection } from "../database/connection.js";
 import sql from 'mssql';
 
-export const getProductos = async () => {
+export const getCategorias = async () => {
     try {
         const pool = await getconnection();
-        const result = await pool.request().query('SELECT * FROM Productos');
+        const result = await pool.request().query('SELECT * FROM categorias');
         return result.recordset;
     } catch (error) {
-        console.error('Error al obtener productos:', error);
-        throw new Error('Error al obtener productos: ' + error.message);
+        console.error('Error al obtener categorías:', error);
+        throw new Error('Error al obtener categorías: ' + error.message);
     }
 };
 
-
-export const getProductos_enoferta = async () => {
-    try {
-        const pool = await getconnection();
-        const result = await pool.request().query("SELECT * FROM Productos where Estado='Oferta'");
-        return result.recordset;
-    } catch (error) {
-        console.error('Error al obtener productos:', error);
-        throw new Error('Error al obtener productos: ' + error.message);
-    }
-};
-
-export const getProducto = async (id) => {
+export const getCategoria = async (id) => {
     try {
         const pool = await getconnection();
         const result = await pool.request()
             .input('id', sql.Int, id)
-            .query('SELECT * FROM productos WHERE idProducto = @id');
+            .query('SELECT * FROM productos WHERE idCategoria = @id');
         return result.recordset;
     } catch (error) {
-        console.error('Error al obtener producto:', error);
-        throw new Error('Error al obtener producto: ' + error.message);
+        console.error('Error al obtener productos:', error);
+        throw new Error('Error al obtener productos: ' + error.message);
     }
 };
 
