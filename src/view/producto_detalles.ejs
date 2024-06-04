@@ -14,13 +14,12 @@
       <ul>
         <li><a href="/"><img src="/images/logo.png" style="width:60px;"></a></li>
         <li>
-          <form action="buscar" method="get">
+          <form action="/buscar" method="get">
             <input type="text" name="Buscador" id="Buscador" placeholder="Buscador" style="width: 500px; color: black;">
             <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
           </form>
         </li>
-        <li><a href="#Usuario"><i class="fa-solid fa-user"></i></a></li>
-        <li><a href="#Carrito"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        <li><a href="/Carrito"><i class="fa-solid fa-cart-shopping"></i></a></li>
       </ul>
     </nav>
     <!--navbar fin-->
@@ -31,22 +30,27 @@
       <% }); %>
   </div>
         <div class="Contenido">
+          <% producto_detalles.forEach(producto => { %>
             <div class="imagen">
-                <img id="imagen_detalles"src="/images/71NzegT2VTL.jpg">
+                <img id="imagen_detalles"src="<%= producto.img %>">
             </div>
             <div class="info">
                 <span>
                     <br>
                     Información
-                    <% producto_detalles.forEach(producto => { %>
+                   
                         <p><%= producto.Producto %> </p>
                     <p>Existencia: <%= producto.Stock %> </p>    
                    <br><br>
                         <p>Precio: $<%= producto.Precio %></p>
                     <br>
                     Cantidad:
-                    <input type="number" name="Cantidad" id="Cantidad" value="0" min="0">
-                    <button type="submit" id="Carrito">Añadir al carrito</button>
+                    <form id="producto_carritoform" action="/producto_carrito" method="post">
+                      <input type="number" name="Cantidad" id="Cantidad" value="1" min="1">
+                      <input type="hidden" name="idProducto" id="idProducto" value="<%=producto.idProducto %>">
+                      <button type="submit" id="Carrito" style="cursor: pointer">Añadir al carrito</button>
+                    </form>
+                    
                 </span>
             </div>
             <div class="descripcion">
@@ -62,7 +66,7 @@
             <% productos.forEach(producto => { %>
               <a href="/producto/<%= producto.idProducto %>">
                 <div class="pro_individual">
-                  <img src="/images/logo.png" alt="">
+                  <img src="<%= producto.img %>">
                   <h4><%= producto.Producto %></h4>
                   <p>$<%= producto.Precio %></p>
                 </div>

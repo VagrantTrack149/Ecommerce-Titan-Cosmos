@@ -2,8 +2,8 @@
 
 import { Router } from 'express';
 import { getCategorias, getCategoria } from '../controllers/categoriaController.js';
-import { getProductos, getProducto, getProductos_enoferta } from '../controllers/products.controllers.js';
-
+import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito } from '../controllers/products.controllers.js';
+import {getCarrito} from '../controllers/Carrito.controller.js'
 const router = Router();
 
 router.get('/', async (req,res) =>{
@@ -33,7 +33,6 @@ router.get('/categoria/:id', async (req, res) => {
 });
 
 
-
 router.get('/producto/:id', async (req, res) => {
     try {
         const categorias = await getCategorias();
@@ -47,5 +46,26 @@ router.get('/producto/:id', async (req, res) => {
     }
 });
 
+router.post('/producto_carrito', async (req, res) => {
+    try {
+        const { idProducto, Cantidad } = req.body;
+        await insertProductoCarrito(idProducto, Cantidad);
+        res.redirect('/');  // Redirige a la página principal o a donde desees
+    } catch (error) {
+        console.error('Error al meter el producto en el carrito:', error);
+        res.status(500).send('Error al insertar producto en el carrito: ' + error.message);
+    }
+});
 
+router.get('/Carrito',async (req,res) => {
+    try {
+        const carrito = await getCarrito();
+        const categorias= await getCategorias();
+        const productos = await getProductos();
+        res.render('carrito', { carrito, categorias, productos });
+    } catch (error) {
+        console.error('Error al insertar producto en el carrito:', error);
+        res.status(500).send('Error al insertar producto en el carrito: ' + error.message);
+    }
+})
 export default router;
