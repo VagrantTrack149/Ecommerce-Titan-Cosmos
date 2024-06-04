@@ -18,7 +18,7 @@ body {
     justify-content: space-between;
   }
   
-  .menu ul li {
+  .menu ul li a{
     display: flex;
     align-items: center;
   }
@@ -26,7 +26,6 @@ body {
     color: white;
     text-align: center;
     padding: 14px 16px;
-    text-decoration: none;
   }
   
   .menu ul li a:hover, .menu ul li button:hover {
@@ -58,10 +57,10 @@ body {
   }
   
   .menu ul li:first-child {
-    margin-right: auto;
+    margin-left: auto;
   }
   
-  .menu ul li:nth-child(2) {
+ .menu ul li:nth-child(2) {
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -80,7 +79,6 @@ body {
     background-color:  rgb(236, 236, 236);
     padding: 5px;
   }
-
 
   .Productos {
     display: flex;
@@ -158,18 +156,19 @@ body {
   }
   .Contenido{
     width: 78%;
-    height: 90%;
     margin: 0 auto;
     background-color: rgb(250, 250, 250);
     border-radius: 15px;
   }
   #imagen_detalles{
-    width: 100px;
+    width: 120px;
   }
   .imagen{
-    margin: 10px 30px 10px 10px;
+    margin: 10px 40px 10px 20px;
     position: relative;
     display: inline-block;
+    object-fit: cover;
+    padding: 0.2%;
   }
   .Nombre{
     position: relative;
@@ -203,6 +202,15 @@ body {
   }
   #Actualizar_boton{
     background-color: #2269e4; 
+    border: none;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  #Eliminar{
+    background-color: #b90000; 
     border: none;
     color: white;
     padding: 5px;

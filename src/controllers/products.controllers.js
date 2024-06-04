@@ -1,10 +1,10 @@
 import { getconnection } from "../database/connection.js";
 import sql from 'mssql';
-
+//select
 export const getProductos = async () => {
     try {
         const pool = await getconnection();
-        const result = await pool.request().query('SELECT * FROM Productos');
+        const result = await pool.request().query('SELECT TOP 12 p.*, ip.img FROM Productos p INNER JOIN img_productos ip ON p.idProducto = ip.idProducto ORDER BY NEWID()');
         return result.recordset;
     } catch (error) {
         console.error('Error al obtener productos:', error);
@@ -16,7 +16,7 @@ export const getProductos = async () => {
 export const getProductos_enoferta = async () => {
     try {
         const pool = await getconnection();
-        const result = await pool.request().query("SELECT * FROM Productos where Estado='Oferta'");
+        const result = await pool.request().query("SELECT p.*, ip.img FROM Productos p INNER JOIN img_productos ip ON p.idProducto = ip.idProducto where Estado='Oferta'");
         return result.recordset;
     } catch (error) {
         console.error('Error al obtener productos:', error);
@@ -29,7 +29,7 @@ export const getProducto = async (id) => {
         const pool = await getconnection();
         const result = await pool.request()
             .input('id', sql.Int, id)
-            .query('SELECT * FROM productos WHERE idProducto = @id');
+            .query('SELECT p.*, ip.img FROM Productos p INNER JOIN img_productos ip ON p.idProducto = ip.idProducto WHERE p.idProducto = @id');
         return result.recordset;
     } catch (error) {
         console.error('Error al obtener producto:', error);
@@ -38,6 +38,20 @@ export const getProducto = async (id) => {
 };
 
 //insert
+
+export const insertProductoCarrito = async (idProducto, Cantidad) => {
+    try {
+        const pool = await getconnection();
+        await pool.request()
+            .input('idProducto', sql.Int, idProducto)
+            .input('Cantidad', sql.Int, Cantidad)
+            .query('INSERT INTO Carrito (idProducto, Cantidad) VALUES (@idProducto, @Cantidad)');
+    } catch (error) {
+        console.error('Error al insertar producto en el carrito:', error);
+        throw new Error('Error al insertar producto en el carrito: ' + error.message);
+    }
+};
+
 /*export const nuevoProducto=async (req,res)=>{
     console.log(req.body)
     const pool=await getconnection()

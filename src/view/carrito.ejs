@@ -1,0 +1,101 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Carrito</title>
+    <link rel="shortcut icon" href="/images/logo.png" />
+    <link rel="stylesheet" href="/css/Style/Carrito.css">
+    <script src="https://kit.fontawesome.com/d00178e030.js" crossorigin="anonymous"></script>
+</head>
+  <body>
+    <!--navbar para buscar, usuario y carrito-->
+    <nav class="menu">
+        <ul>
+          <li><a href="/"><img src="/images/logo.png" style="width:60px;"></a></li>
+          <li>
+            <form action="buscar" method="get">
+              <input type="text" name="Buscador" id="Buscador" placeholder="Buscador" style="width: 500px; color: black;">
+              <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+          </li>
+          <li><a href="/Carrito"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        </ul>
+      </nav>
+      <!--navbar fin-->
+      <!--cuerpo de la pagina-->
+      <div class="Categorias">
+        <% categorias.forEach(categoria => { %>
+            <a href="/categoria/<%= categoria.idCategoria %>"><%= categoria.Categoria %></a>
+        <% }); %>
+    </div>
+        <div class="Contenido">
+            <ul class="Carrito_productos" style="list-style-type: none; padding: 0;">
+                <% carrito.forEach(carro => {%> 
+                <li style="list-style-type: none;"> 
+                    <div class="imagen">
+                        <img id="imagen_detalles"src="<%= carro.img %>">
+                    </div>
+                    <div class="Nombre">
+                        <span><%= carro.Producto %>
+                            <br>
+                            Precio por pieza: <%= carro.Precio %>
+                            <br>
+                            Cantidad: <%= carro.cantidad %>
+                            <br>
+                            Precio total del producto: <%= carro.total_producto %>
+                            <br>
+                            <form action="/actualizar">
+                                <input type="number" name="Cantidad" id="Cantidad" value="<%= carro.cantidad %>" min="1" max="<%= carro.Stock %>">
+                                <button type="submit" id="Actualizar_boton" style="cursor: pointer;">Actualizar</button>
+                            </form>
+                            <form action="/borrar_elemento_carrito">
+                                <button type="submit" id="Eliminar" class="Eliminar" style="cursor: pointer;">Eliminar producto del carrito</button>
+                            </form>
+                        </span>
+                    </div>
+                </li>
+            </ul>
+            <% }); %>
+            <div class="info">
+                <span>
+                    <br>
+                    Información
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    Total:<%= carrito[0].total_general %>
+                    <br>
+                    <br>
+                    <form action="/imprimir" method="get">
+                        <button type="submit" id="Carrito">Pagar</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+        <h3>Productos:</h3>
+    <div class="Productos">
+        <% productos.forEach(producto => { %>
+          <a href="/producto/<%= producto.idProducto %>">
+            <div class="pro_individual">
+              <img src="<%= producto.img %>" alt="">
+              <h4><%= producto.Producto %></h4>
+              <p>$<%= producto.Precio %></p>
+            </div>
+          </a>
+        <% }); %>
+    </div>
+      <!--cuerpo de la pagina fin-->
+      <!--Pagin fin-->
+      <div class="fin_pagina">
+        <span> <sTRONg>Datos de contacto:</sTRONg>
+            <br>
+            Telefono: 0 12345 6789
+            <br>
+            Correo: correo@correo.com
+        </span>
+    <!--Pagin fin fin-->
+      </div>
+  </body>
+</html>

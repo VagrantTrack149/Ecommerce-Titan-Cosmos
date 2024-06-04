@@ -19,8 +19,7 @@
             <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
           </form>
         </li>
-        <li><a href="#Usuario"><i class="fa-solid fa-user"></i></a></li>
-        <li><a href="#Carrito"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        <li><a href="/Carrito"><i class="fa-solid fa-cart-shopping"></i></a></li>
       </ul>
     </nav>
     <!--navbar fin-->
@@ -38,7 +37,7 @@
         <% categoria.forEach(producto => { %>
             <a href="/producto/<%= producto.idProducto %>">
                 <div class="pro_individual">
-                    <img src="/images/logo.png" alt="">
+                    <img src="<%= producto.img %>" alt="">
                     <h4><%= producto.Producto %></h4>
                     <p>$<%= producto.Precio %></p>
                 </div>
@@ -48,7 +47,7 @@
 </div>
 
     <!--Pagin fin-->
-    <div class="fin_pagina">
+    <div class="fin_pagina_detalles">
       <span><strong>Datos de contacto:</strong><br>Telefono: 0 12345 6789<br>Correo: correo@correo.com</span>
     </div>
   </body>
