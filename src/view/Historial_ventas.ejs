@@ -1,0 +1,68 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Carrito</title>
+    <link rel="shortcut icon" href="/images/logo.png" />
+    <link rel="stylesheet" href="/css/Style/Usuario_config.css">
+    <script src="https://kit.fontawesome.com/d00178e030.js" crossorigin="anonymous"></script>
+</head>
+  <body>
+    <!--navbar para buscar, usuario y carrito-->
+    <nav class="menu">
+        <ul>
+          <li><a href="/"><img src="/images/logo.png" style="width:60px;"></a></li>
+          <li>
+            <form action="/buscar" method="post">
+                <input type="text" name="texto" id="texto" placeholder="Buscador" style="width: 500px; color: black;" value="">
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+          </li>
+          <li><a href="/Carrito"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        </ul>
+      </nav>
+      <!--navbar fin-->
+      <!--cuerpo de la pagina-->
+      <div class="Categorias">
+        <% categorias.forEach(categoria => { %>
+            <a href="/categoria/<%= categoria.idCategoria %>"><%= categoria.Categoria %></a>
+        <% }); %>
+    </div>
+        <div class="Contenido">
+            <h4>Ventas</h4>
+            <table>
+                <tbody>
+                <tr>
+                    <th>No:</th>
+                    <th>Productos:</th>
+                    <th>Total:</th>
+                    <th>Fecha:</th>
+                    <th>Descargar:</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Laptop: 1 <br>
+                        Celular: 2
+                    </td>
+                    <td>350</td>
+                    <td>04/06/2024</td>
+                    <td>
+                        <Button type="submit" id="Actualizar_boton" style="cursor: pointer;">Descargar</Button> 
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+      <!--cuerpo de la pagina fin-->
+      <!--Pagin fin-->
+      <div class="fin_pagina">
+        <span> <sTRONg>Datos de contacto:</sTRONg>
+            <br>
+            Telefono: 0 12345 6789
+            <br>
+            Correo: correo@correo.com
+        </span>
+    <!--Pagin fin fin-->
+      </div>
+  </body>
+</html>
