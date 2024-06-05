@@ -46,7 +46,11 @@
                     <td><%= venta.Total %></td>
                     <td><%= venta.Fecha %></td>
                     <td>
-                        <Button type="submit" id="Actualizar_boton" style="cursor: pointer;">Descargar</Button> 
+                      <form action="/imprimir" method="get">
+                        <input type="hidden" name="idDetalle" id="idDetalle" value="<%= venta.idDetalle %>">
+                        <Button type="submit" id="Actualizar_boton" style="cursor: pointer;">Descargar</Button>
+                    </form>
+                         
                     </td>
                 </tr>
                 <% }); %>
@@ -56,6 +60,7 @@
       <!--cuerpo de la pagina fin-->
       <!--Pagin fin-->
       <div class="fin_pagina">
+        <a href="/Administracion" id="admin" style="left: 0px; position: absolute">Admin</a>
         <span> <sTRONg>Datos de contacto:</sTRONg>
             <br>
             Telefono: 0 12345 6789
