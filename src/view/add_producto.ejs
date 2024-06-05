@@ -1,0 +1,80 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Carrito</title>
+    <link rel="shortcut icon" href="/images/logo.png" />
+    <link rel="stylesheet" href="/css/Style/Usuario_config.css">
+    <script src="https://kit.fontawesome.com/d00178e030.js" crossorigin="anonymous"></script>
+</head>
+  <body>
+    <!--navbar para buscar, usuario y carrito-->
+    <nav class="menu">
+        <ul>
+          <li><a href="/"><img src="/images/logo.png" style="width:60px;"></a></li>
+          <li>
+            <form action="/buscar" method="post">
+                <input type="text" name="texto" id="texto" placeholder="Buscador" style="width: 500px; color: black;" value="">
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+          </li>
+          <li><a href="/Carrito"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        </ul>
+      </nav>
+      <!--navbar fin-->
+      <!--cuerpo de la pagina-->
+      <div class="Categorias">
+        <% categorias.forEach(categoria => { %>
+            <a href="/categoria/<%= categoria.idCategoria %>"><%= categoria.Categoria %></a>
+        <% }); %>
+    </div>
+        <div class="Contenido">
+            <form action="/add" method="post" enctype="multipart/form-data">
+                <br><br><br>
+                Producto: &nbsp;
+                <input type="text" class="text" id="Producto" name="Producto" placeholder="Nombre del Producto" required>
+                <br><br>
+                Descripción: &nbsp;
+                <textarea name="Descripcion" id="Descripcion" required></textarea>
+                <br><br>
+                Categoria: &nbsp;
+                <select name="Categoria" id="Categoria" required>
+                    <% categorias.forEach(categoria => { %>
+                        <option value="<%= categoria.idCategoria %>"><%= categoria.Categoria %></option>    
+                    <% }); %>
+                </select>
+                <br><br>
+                Precio: &nbsp;
+                <input type="number" class="Precio" id="Precio" name="Precio" placeholder="$$$" min="1" step="0.01" required>
+                <br><br>
+                <input type="file" class="imagen_input" id="imagen_input" name="imagen" accept="image/jpeg" required>
+                <br><br>
+                Stock: &nbsp;
+                <input type="number" class="Stock" id="Stock" name="Stock" placeholder="1" min="1" required>
+                <br><br>
+                Estado: &nbsp;
+                <select name="Estado" id="Estado" required>
+                    <option value="En Uso">En Uso</option>
+                    <option value="Descontinuado">Descontinuado</option>
+                    <option value="Oferta">Oferta</option>
+                </select>
+                <br><br>
+                <br>
+                <button type="submit" id="Actualizar_boton">Registrar producto</button>
+                <br>
+            </form>
+            
+        </div>
+      <!--cuerpo de la pagina fin-->
+      <!--Pagin fin-->
+      <div class="fin_pagina_rel">
+        <span> <sTRONg>Datos de contacto:</sTRONg>
+            <br>
+            Telefono: 0 12345 6789
+            <br>
+            Correo: correo@correo.com
+        </span>
+    <!--Pagin fin fin-->
+      </div>
+  </body>
+</html>

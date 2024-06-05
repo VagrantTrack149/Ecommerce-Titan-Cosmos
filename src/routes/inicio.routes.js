@@ -1,10 +1,13 @@
 // inicio.routes.js
 
 import { Router } from 'express';
+import multer from 'multer';
 import { getCategorias, getCategoria } from '../controllers/categoriaController.js';
-import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito, buscarProducto} from '../controllers/products.controllers.js';
-import {getCarrito, updateCarritoCantidad, deleteCarrito} from '../controllers/Carrito.controller.js'
+import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito, buscarProducto, addProducto, actualizarProducto} from '../controllers/products.controllers.js';
+import {getCarrito, updateCarritoCantidad, deleteCarrito, Ventas} from '../controllers/Carrito.controller.js'
 const router = Router();
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage }).single('imagen');
 
 router.get('/', async (req,res) =>{
     try {
@@ -111,5 +114,72 @@ router.post('/buscar', async (req, res) => {
     }
 });
 
+router.get('/Administracion', async (req, res) => {
+    try {
+        const categorias = await getCategorias();
+        res.render('Admin', {categorias});
+    } catch (error) {
+        console.error('Error adminitracion:', error);
+        res.status(500).send('Error al administrar: ' + error.message);
+    }
+})
 
+router.get('/menu_productos', async(req, res) => {
+    try {
+        const categorias = await getCategorias();
+        const productos = await getProductos();
+        res.render('Menu_producto', {categorias, productos}); 
+    } catch (error) {
+        console.error('Error adminitracion:', error);
+        res.status(500).send('Error al administrar: ' + error.message);
+    }
+})
+
+router.get('/historial_ventas', async(req, res) => {
+    try {
+        const categorias = await getCategorias();
+        const ventas = await Ventas();
+        res.render('Historial_ventas', {ventas, categorias});
+    } catch (error) {
+        console.error('Error adminitracion:', error);
+        res.status(500).send('Error al administrar: ' + error.message);
+    }
+})
+
+router.get('/add_producto', async (req, res) => {
+    try {
+        const categorias = await getCategorias();
+        res.render('add_producto', { categorias });
+    } catch (error) {
+        console.error('Error administración:', error);
+        res.status(500).send('Error al administrar: ' + error.message);
+    }
+});
+
+router.post('/add', addProducto);
+
+
+router.get('/editar_producto/:idProducto', async (req, res) => {
+    try {
+        const idProducto = req.params.idProducto;
+        const producto = await getProducto(idProducto);
+        const categorias = await getCategorias();
+        res.render('editar_producto', { producto, categorias });
+    } catch (error) {
+        console.error('Error al editar el producto:', error);
+        res.status(500).send('Error al editar el producto: ' + error.message);
+    }
+});
+
+router.post('/editar', async (req, res) => {
+    try {
+        const {idProducto, Producto, Descripcion, Categoria, Precio, Stock, Estado } = req.body;
+        console.log("Print_r: "+JSON.stringify(req.body));
+        await actualizarProducto(idProducto, Producto, Descripcion, Categoria, Precio, Stock, Estado);
+        res.redirect('/menu_productos');
+    } catch (error) {
+        console.error('Error al actualizar el producto:', error);
+        res.status(500).send('Error al actualizar el producto: ' + error.message);
+    }
+});
 export default router;

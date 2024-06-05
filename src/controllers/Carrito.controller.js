@@ -38,3 +38,16 @@ export const deleteCarrito = async (idProducto) => {
         throw new Error('Error al eliminar el elemento ' + error.message);
     }
 }
+
+export const Ventas = async () => {
+    try {
+        const pool = await getconnection();
+        const result = await pool.request().query('SELECT * FROM vw_VentasDetalleProductos;');
+        console.log('Historial encontrado');
+        console.log(result);
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al intentar ver el historial', error);
+        throw new Error('Error al ver el historial ' + error.message);
+    }
+}

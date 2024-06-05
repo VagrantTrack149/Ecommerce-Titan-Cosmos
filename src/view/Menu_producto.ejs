@@ -30,7 +30,7 @@
     </div>
         <div class="Contenido">
             <h4>Productos</h4>
-            <button type="submit" id="Actualizar_boton2" style="cursor: pointer;">Añadir</button>
+            <a href="/add_producto" id="Actualizar_boton2" style="cursor: pointer;"> Añadir</a>
             <table>
                 <tbody>
                 <tr>
@@ -40,21 +40,23 @@
                     <th>Categoria:</th>
                     <th>Opciones:</th>
                 </tr>
+                <% productos.forEach(producto => { %>
                 <tr>
-                    <td>Laptop</td>
-                    <td>Laptop bonita</td>
-                    <td>16</td>
-                    <td>Computo</td>
+                    <td><%=producto.Producto %></td>
+                    <td><%=producto.Descripcion%></td>
+                    <td><%=producto.Stock%></td>
+                    <td><%=producto.Categoria%></td>
                     <td>
-                        <Button type="submit" id="Salir" style="cursor: pointer;">Editar</Button> 
+                        <a href="/editar_producto/<%= producto.idProducto %>" id="Salir" style="cursor: pointer;">Editar</a>
                     </td>
                 </tr>
+              <% }) %>
                 </tbody>
             </table>
         </div>
       <!--cuerpo de la pagina fin-->
       <!--Pagin fin-->
-      <div class="fin_pagina">
+      <div class="fin_pagina_rel">
         <span> <sTRONg>Datos de contacto:</sTRONg>
             <br>
             Telefono: 0 12345 6789
