@@ -52,6 +52,21 @@ export const insertProductoCarrito = async (idProducto, Cantidad) => {
     }
 };
 
+export const buscarProducto = async (texto) => {
+    try {
+        const recibe= " '%"+texto+"%'";
+        console.log(texto);
+        const pool = await getconnection();
+        const result = await pool.request()
+            .query('SELECT p.*, ip.img FROM Productos p INNER JOIN img_productos ip ON p.idProducto = ip.idProducto WHERE LOWER(p.Descripcion) LIKE '+ recibe);
+            console.log(result);
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al buscar productos:', error);
+        throw new Error('Error al buscar productos: ' + error.message);
+    }
+};
+
 /*export const nuevoProducto=async (req,res)=>{
     console.log(req.body)
     const pool=await getconnection()

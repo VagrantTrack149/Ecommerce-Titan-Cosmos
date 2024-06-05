@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><%= categoria[0].Categoria %> - Titan Cosmos</title>
+    <title>Titan Cosmos</title>
     <link rel="shortcut icon" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/Style/Index.css">
     <script src="https://kit.fontawesome.com/d00178e030.js" crossorigin="anonymous"></script>
@@ -14,10 +14,10 @@
       <ul>
         <li><a href="/"><img src="/images/logo.png" style="width:60px;"></a></li>
         <li>
-          <form action="/buscar" method="post">
-            <input type="text" name="texto" id="texto" placeholder="Buscador" style="width: 500px; color: black;" value="">
-            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </form>
+            <form action="/buscar" method="post">
+                <input type="text" name="texto" id="texto" placeholder="Buscador" style="width: 500px; color: black;" value="">
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
         </li>
         <li><a href="/Carrito"><i class="fa-solid fa-cart-shopping"></i></a></li>
       </ul>
@@ -31,10 +31,10 @@
   </div>
   <h3>Productos:</h3>
 <div class="Productos">
-    <% if (categoria.length === 0) { %>
+    <% if (buscar.length === 0) { %>
         <p>No tiene productos</p>
     <% } else { %>
-        <% categoria.forEach(producto => { %>
+        <% buscar.forEach(producto => { %>
             <a href="/producto/<%= producto.idProducto %>">
                 <div class="pro_individual">
                     <img src="<%= producto.img %>" alt="">

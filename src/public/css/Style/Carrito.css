@@ -147,6 +147,7 @@ body {
     font-size: 20px;
   }
   .fin_pagina{
+    position: relative;
     bottom: 0%;
     background-color: #333;
     text-align: center;

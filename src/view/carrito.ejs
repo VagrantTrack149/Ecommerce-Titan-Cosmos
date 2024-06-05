@@ -13,10 +13,10 @@
         <ul>
           <li><a href="/"><img src="/images/logo.png" style="width:60px;"></a></li>
           <li>
-            <form action="buscar" method="get">
-              <input type="text" name="Buscador" id="Buscador" placeholder="Buscador" style="width: 500px; color: black;">
+            <form action="/buscar" method="post">
+              <input type="text" name="texto" id="texto" placeholder="Buscador" style="width: 500px; color: black;" value="">
               <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </form>
+          </form>
           </li>
           <li><a href="/Carrito"><i class="fa-solid fa-cart-shopping"></i></a></li>
         </ul>
@@ -44,11 +44,13 @@
                             <br>
                             Precio total del producto: <%= carro.total_producto %>
                             <br>
-                            <form action="/actualizar">
-                                <input type="number" name="Cantidad" id="Cantidad" value="<%= carro.cantidad %>" min="1" max="<%= carro.Stock %>">
-                                <button type="submit" id="Actualizar_boton" style="cursor: pointer;">Actualizar</button>
-                            </form>
-                            <form action="/borrar_elemento_carrito">
+                            <form id="actualizar_carrito_form" action="/actualizar_carrito" method="post">
+                              <input type="hidden" name="idProducto" value="<%= carro.idProducto %>">
+                              <input type="number" name="Cantidad" value="<%= carro.cantidad %>" min="1">
+                              <button type="submit" id="Actualizar_boton">Actualizar</button>
+                          </form>
+                            <form action="/borrar_elemento_carrito" method="post">
+                              <input type="hidden" name="idProducto" value="<%= carro.idProducto %>">
                                 <button type="submit" id="Eliminar" class="Eliminar" style="cursor: pointer;">Eliminar producto del carrito</button>
                             </form>
                         </span>
