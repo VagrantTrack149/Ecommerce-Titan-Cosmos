@@ -47,10 +47,7 @@
                     <td><%=producto.Stock%></td>
                     <td><%=producto.Categoria%></td>
                     <td>
-                      <form action="/edit_producto" method="post">
-                        <input type="hidden" value="<%= producto.idProducto %>">
-                        <Button type="submit" id="Salir" style="cursor: pointer;">Editar</Button> 
-                      </form>
+                        <a href="/editar_producto/<%= producto.idProducto %>" id="Salir" style="cursor: pointer;">Editar</a>
                     </td>
                 </tr>
               <% }) %>

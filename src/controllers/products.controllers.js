@@ -113,6 +113,30 @@ export const addProducto = async (req, res) => {
         }
     });
 };
+
+export const actualizarProducto = async (idProducto, Producto, Descripcion, Categoria, Precio, Stock, Estado) => {
+    try {
+        console.log(idProducto);
+        console.log(Producto);
+        console.log(Descripcion);
+        console.log(Categoria);
+        console.log(Precio);
+        const pool = await getconnection();
+        await pool.request()
+            .input('idProducto', sql.Int, idProducto)
+            .input('Producto', sql.NVarChar(100), Producto)
+            .input('Descripcion', sql.NVarChar(sql.MAX), Descripcion)
+            .input('Categoria', sql.Int, Categoria)
+            .input('Precio', sql.Decimal(10, 2), Precio)
+            .input('Stock', sql.Int, Stock)
+            .input('Estado', sql.NVarChar(100), Estado)
+            .query('UPDATE Productos SET Producto = @Producto, Descripcion = @Descripcion, idCategoria = @Categoria, Precio = @Precio, Stock = @Stock, Estado = @Estado WHERE idProducto = @idProducto');
+        console.log('Producto actualizado con éxito');
+    } catch (error) {
+        console.error('Error al actualizar el producto:', error);
+        throw new Error('Error al actualizar el producto: ' + error.message);
+    }
+};
 /*export const nuevoProducto=async (req,res)=>{
     console.log(req.body)
     const pool=await getconnection()
