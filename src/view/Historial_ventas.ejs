@@ -46,7 +46,11 @@
                     <td><%= venta.Total %></td>
                     <td><%= venta.Fecha %></td>
                     <td>
-                        <Button type="submit" id="Actualizar_boton" style="cursor: pointer;">Descargar</Button> 
+                      <form action="/imprimir" method="get">
+                        <input type="hidden" name="idDetalle" id="idDetalle" value="<%= venta.idDetalle %>">
+                        <Button type="submit" id="Actualizar_boton" style="cursor: pointer;">Descargar</Button>
+                    </form>
+                         
                     </td>
                 </tr>
                 <% }); %>

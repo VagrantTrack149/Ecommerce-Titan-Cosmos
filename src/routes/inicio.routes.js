@@ -2,9 +2,12 @@
 
 import { Router } from 'express';
 import multer from 'multer';
+import PDFDocument from 'pdfkit';
+import fs from 'fs';
 import { getCategorias, getCategoria } from '../controllers/categoriaController.js';
 import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito, buscarProducto, addProducto, actualizarProducto} from '../controllers/products.controllers.js';
 import {getCarrito, updateCarritoCantidad, deleteCarrito, Ventas} from '../controllers/Carrito.controller.js'
+
 const router = Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('imagen');
@@ -182,4 +185,41 @@ router.post('/editar', async (req, res) => {
         res.status(500).send('Error al actualizar el producto: ' + error.message);
     }
 });
+
+router.get('/imprimir', async (req, res) => {
+    try {
+        const carrito = await getCarrito();
+        const doc = new PDFDocument();
+        const fileName = 'carrito.pdf';
+        
+        doc.fontSize(12).text('Carrito de Compras', { align: 'center' });
+        doc.moveDown();
+        
+        carrito.forEach(producto => {
+            doc.text(`Producto: ${producto.Producto}`);
+            doc.text(`Descripción: ${producto.Descripcion}`);
+            doc.text(`Precio: ${producto.Precio}`);
+            doc.text(`Cantidad: ${producto.cantidad}`);
+            doc.text(`Total del Producto: ${producto.total_producto}`);
+            doc.moveDown();
+        });
+
+        const totalGeneral = carrito.length > 0 ? carrito[0].total_general : 0;
+        doc.text(`Total General: ${totalGeneral}`);
+
+        doc.pipe(fs.createWriteStream(fileName));
+        doc.end();
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+        fs.createReadStream(fileName).pipe(res);
+        
+    } catch (error) {
+        console.error('Error al generar el PDF:', error);
+        res.status(500).send('Error al generar el PDF: ' + error.message);
+    }
+});
+
+
+
 export default router;
