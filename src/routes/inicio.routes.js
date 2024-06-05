@@ -2,8 +2,8 @@
 
 import { Router } from 'express';
 import { getCategorias, getCategoria } from '../controllers/categoriaController.js';
-import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito, buscarProducto} from '../controllers/products.controllers.js';
-import {getCarrito, updateCarritoCantidad, deleteCarrito} from '../controllers/Carrito.controller.js'
+import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito, buscarProducto, addProducto} from '../controllers/products.controllers.js';
+import {getCarrito, updateCarritoCantidad, deleteCarrito, Ventas} from '../controllers/Carrito.controller.js'
 const router = Router();
 
 router.get('/', async (req,res) =>{
@@ -111,5 +111,48 @@ router.post('/buscar', async (req, res) => {
     }
 });
 
+router.get('/Administracion', async (req, res) => {
+    try {
+        const categorias = await getCategorias();
+        res.render('Admin', {categorias});
+    } catch (error) {
+        console.error('Error adminitracion:', error);
+        res.status(500).send('Error al administrar: ' + error.message);
+    }
+})
+
+router.get('/menu_productos', async(req, res) => {
+    try {
+        const categorias = await getCategorias();
+        const productos = await getProductos();
+        res.render('Menu_producto', {categorias, productos}); 
+    } catch (error) {
+        console.error('Error adminitracion:', error);
+        res.status(500).send('Error al administrar: ' + error.message);
+    }
+})
+
+router.get('/historial_ventas', async(req, res) => {
+    try {
+        const categorias = await getCategorias();
+        const ventas = await Ventas();
+        res.render('Historial_ventas', {ventas, categorias});
+    } catch (error) {
+        console.error('Error adminitracion:', error);
+        res.status(500).send('Error al administrar: ' + error.message);
+    }
+})
+
+router.get('/add_producto', async (req, res) => {
+    try {
+        const categorias = await getCategorias();
+        res.render('add_producto', { categorias });
+    } catch (error) {
+        console.error('Error administración:', error);
+        res.status(500).send('Error al administrar: ' + error.message);
+    }
+});
+
+router.post('/add', addProducto);
 
 export default router;

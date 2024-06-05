@@ -39,17 +39,17 @@
                     <th>Fecha:</th>
                     <th>Descargar:</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Laptop: 1 <br>
-                        Celular: 2
+                <tr><% ventas.forEach(venta => { %> 
+                    <td><%= venta.idDetalle %></td>
+                    <td><%= venta.ProductosConcatenados %>
                     </td>
-                    <td>350</td>
-                    <td>04/06/2024</td>
+                    <td><%= venta.Total %></td>
+                    <td><%= venta.Fecha %></td>
                     <td>
                         <Button type="submit" id="Actualizar_boton" style="cursor: pointer;">Descargar</Button> 
                     </td>
                 </tr>
+                <% }); %>
                 </tbody>
             </table>
         </div>

@@ -184,3 +184,8 @@ font-size: small;
 color:white;
 margin-top: 30px;
 }
+
+#Descripcion{
+  width: 400px;
+  height: 90px;
+}
