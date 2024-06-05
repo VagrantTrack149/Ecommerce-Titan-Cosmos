@@ -190,3 +190,15 @@ margin-top: 30px;
   width: 400px;
   height: 90px;
 }
+#admin{
+  left: 0px;
+  position: relative;
+  background-color: #e46322; 
+  border: none;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 10px;
+  margin: 10px;
+}
