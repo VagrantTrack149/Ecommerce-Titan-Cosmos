@@ -94,6 +94,8 @@ body {
   
 
   a .pro_individual {
+    justify-content: space-evenly;
+    white-space: wrap;
     flex: 1 0 25%; 
     box-sizing: border-box;
     text-align: center;
@@ -110,7 +112,7 @@ body {
   
   a .pro_individual h4 {
     margin: 10px 0 5px 0;
-    font-size: 16px;
+    font-size: 14px;
   }
   
   a .pro_individual {

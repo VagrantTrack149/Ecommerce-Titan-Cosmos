@@ -6,7 +6,7 @@ import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import { getCategorias, getCategoria } from '../controllers/categoriaController.js';
 import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito, buscarProducto, addProducto, actualizarProducto} from '../controllers/products.controllers.js';
-import {getCarrito, updateCarritoCantidad, deleteCarrito, Ventas} from '../controllers/Carrito.controller.js'
+import {getCarrito, updateCarritoCantidad, deleteCarrito, Ventas, Ventas_historial, pagar} from '../controllers/Carrito.controller.js'
 
 const router = Router();
 const storage = multer.memoryStorage();
@@ -209,17 +209,57 @@ router.get('/imprimir', async (req, res) => {
 
         doc.pipe(fs.createWriteStream(fileName));
         doc.end();
-
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
         fs.createReadStream(fileName).pipe(res);
-        
     } catch (error) {
         console.error('Error al generar el PDF:', error);
         res.status(500).send('Error al generar el PDF: ' + error.message);
     }
 });
 
+
+router.get('/pago', async(req,res)=> {
+    try {
+        await pagar();
+        res.redirect('/');
+    } catch (error) {
+        console.error('Error al procesar el pago:', error);
+        res.status(500).send('Error al procesar el pago: ' + error.message);
+    }
+    
+})
+
+router.get('/descargar', async (req, res) => {
+    try {
+        const ventas = await Ventas_historial(req.query.idDetalle);
+        const doc = new PDFDocument();
+        const fileName = ventas[0].idDetalle + '.pdf';
+        
+        doc.fontSize(12).text('Carrito de Compras', { align: 'center' });
+        doc.moveDown();
+        
+        ventas.forEach(producto => {
+            doc.text(`Producto: ${producto.ProductosConcatenados}`);
+            doc.moveDown();
+        });
+
+        const totalGeneral = ventas.length > 0 ? ventas[0].Total : 0;
+        doc.text(`Total General: ${totalGeneral}`);
+        const Fecha = ventas.length > 0 ? ventas[0].Fecha : 'No existe';
+        doc.text(`Fecha: ${Fecha}`);
+        doc.pipe(fs.createWriteStream(fileName));
+        doc.end();
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+        fs.createReadStream(fileName).pipe(res);
+    
+    } catch (error) {
+        console.error('Error al generar el PDF:', error);
+        res.status(500).send('Error al generar el PDF: ' + error.message);
+    }
+});
 
 
 export default router;

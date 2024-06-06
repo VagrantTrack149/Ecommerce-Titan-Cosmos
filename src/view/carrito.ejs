@@ -59,22 +59,28 @@
             </ul>
             <% }); %>
             <div class="info">
-                <span>
-                    <br>
-                    Información
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    Total:<%= carrito[0].total_general %>
-                    <br>
-                    <br>
-                    <form action="/imprimir" method="get">
-                        <button type="submit" id="Carrito">Pagar</button>
-                    </form>
-                </span>
-            </div>
+              <span>
+                  <br>
+                  Información
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <% if (carrito.length > 0) { %>
+                      <p>Total: <%= carrito[0].total_general %></p>
+                      <br>
+                      <br>
+                      <form action="/imprimir" method="get">
+                          <button type="submit" id="Actualizar_boton">Descargar Orden de compra</button> <br><br>
+                      </form>
+                      <a href="/pago" id="Carrito">Pagar</a>
+                  <% } else { %>
+                      <p>No hay productos en el carrito</p>
+                  <% } %>
+              </span>
+          </div>
+          
         </div>
         <h3>Productos:</h3>
     <div class="Productos">

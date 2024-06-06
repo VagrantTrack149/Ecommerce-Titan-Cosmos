@@ -52,3 +52,28 @@ export const Ventas = async () => {
     }
 }
 
+export const Ventas_historial = async (id) => {
+    try {
+        const pool = await getconnection();
+        const result = await pool.request()
+        .input('id', sql.Int, id)
+        .query('exec ObtenerDetalleVentaPorIdDetalle @id;');
+        console.log('Historial encontrado');
+        console.log(result);
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al intentar ver el historial', error);
+        throw new Error('Error al ver el historial ' + error.message);
+    }
+}
+
+export const pagar = async() =>{
+    try {
+        const pool = await getconnection();
+        await pool.request().query('SET IDENTITY_INSERT DetalleVenta ON exec PasarACarrito');
+        console.log('Ahora es parte del historial');
+    } catch (error) {
+        console.error('Error al intentar meter el historial', error);
+        throw new Error('Error al meter el historial ' + error.message);
+    }
+}

@@ -46,7 +46,7 @@
                     <td><%= venta.Total %></td>
                     <td><%= venta.Fecha %></td>
                     <td>
-                      <form action="/imprimir" method="get">
+                      <form action="/descargar" method="get">
                         <input type="hidden" name="idDetalle" id="idDetalle" value="<%= venta.idDetalle %>">
                         <Button type="submit" id="Actualizar_boton" style="cursor: pointer;">Descargar</Button>
                     </form>
@@ -59,7 +59,7 @@
         </div>
       <!--cuerpo de la pagina fin-->
       <!--Pagin fin-->
-      <div class="fin_pagina">
+      <div class="fin_pagina_rel">
         <a href="/Administracion" id="admin" style="left: 0px; position: absolute">Admin</a>
         <span> <sTRONg>Datos de contacto:</sTRONg>
             <br>
