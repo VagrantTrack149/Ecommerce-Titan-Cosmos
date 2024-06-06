@@ -6,7 +6,7 @@ import fs from 'fs';
 export const getProductos = async () => {
     try {
         const pool = await getconnection();
-        const result = await pool.request().query('SELECT TOP 12 p.*, ip.img, c.Categoria FROM Productos p INNER JOIN img_productos ip ON p.idProducto = ip.idProducto INNER JOIN Categorias c ON p.idCategoria = c.idCategoria ORDER BY NEWID()');
+        const result = await pool.request().query('SELECT * FROM vw_RandomProducts;');
         return result.recordset;
     } catch (error) {
         console.error('Error al obtener productos:', error);
@@ -18,7 +18,7 @@ export const getProductos = async () => {
 export const getProductos_enoferta = async () => {
     try {
         const pool = await getconnection();
-        const result = await pool.request().query("SELECT p.*, ip.img FROM Productos p INNER JOIN img_productos ip ON p.idProducto = ip.idProducto where Estado='Oferta'");
+        const result = await pool.request().query("SELECT * FROM vw_ProductosOferta;");
         return result.recordset;
     } catch (error) {
         console.error('Error al obtener productos:', error);
@@ -31,7 +31,7 @@ export const getProducto = async (id) => {
         const pool = await getconnection();
         const result = await pool.request()
             .input('id', sql.Int, id)
-            .query('SELECT p.*, ip.img FROM Productos p INNER JOIN img_productos ip ON p.idProducto = ip.idProducto WHERE p.idProducto = @id');
+            .query('EXEC sp_GetProductoByID @id;');
         return result.recordset;
     } catch (error) {
         console.error('Error al obtener producto:', error);
@@ -47,7 +47,7 @@ export const insertProductoCarrito = async (idProducto, Cantidad) => {
         await pool.request()
             .input('idProducto', sql.Int, idProducto)
             .input('Cantidad', sql.Int, Cantidad)
-            .query('INSERT INTO Carrito (idProducto, Cantidad) VALUES (@idProducto, @Cantidad)');
+            .query('EXEC sp_InsertarEnCarrito @idProducto, @Cantidad');
     } catch (error) {
         console.error('Error al insertar producto en el carrito:', error);
         throw new Error('Error al insertar producto en el carrito: ' + error.message);
@@ -60,7 +60,8 @@ export const buscarProducto = async (texto) => {
         console.log(texto);
         const pool = await getconnection();
         const result = await pool.request()
-            .query('SELECT p.*, ip.img FROM Productos p INNER JOIN img_productos ip ON p.idProducto = ip.idProducto WHERE LOWER(p.Descripcion) LIKE '+ recibe);
+            .input('texto', sql.VarChar(255), texto)
+            .query('EXEC sp_BuscarProductos @texto;');
             console.log(result);
         return result.recordset;
     } catch (error) {
@@ -86,7 +87,7 @@ export const addProducto = async (req, res) => {
 
             // Convierte la imagen a base64
             const imagenBase64 = "data:image/jpeg;base64,"+req.file.buffer.toString('base64');
-
+            console.log(Categoria);
             const pool = await getconnection();
             await pool.request()
                 .input('Producto', sql.NVarChar, Producto)
@@ -96,16 +97,7 @@ export const addProducto = async (req, res) => {
                 .input('Stock', sql.Int, Stock)
                 .input('Estado', sql.NVarChar, Estado)
                 .input('Imagen', sql.VarChar(sql.MAX), imagenBase64)
-                .query(`
-                    INSERT INTO Productos (Producto, Descripcion, idCategoria, Precio, Stock, Estado)
-                    VALUES (@Producto, @Descripcion, @idCategoria, @Precio, @Stock, @Estado);
-
-                    DECLARE @idProducto INT = SCOPE_IDENTITY();
-
-                    INSERT INTO img_productos (idProducto, img)
-                    VALUES (@idProducto, @Imagen);
-                `);
-            console.log(imagenBase64);
+                .query(`EXEC sp_InsertarProducto @Producto,@Descripcion,@idCategoria,@Precio,@Stock,@Estado,@Imagen`);
             res.redirect('/menu_productos'); 
         } catch (error) {
             console.error('Error al registrar el producto:', error);
@@ -130,7 +122,7 @@ export const actualizarProducto = async (idProducto, Producto, Descripcion, Cate
             .input('Precio', sql.Decimal(10, 2), Precio)
             .input('Stock', sql.Int, Stock)
             .input('Estado', sql.NVarChar(100), Estado)
-            .query('UPDATE Productos SET Producto = @Producto, Descripcion = @Descripcion, idCategoria = @Categoria, Precio = @Precio, Stock = @Stock, Estado = @Estado WHERE idProducto = @idProducto');
+            .query('EXEC sp_ActualizarProducto @idProducto,@Producto,@Descripcion,  @Categoria, @Precio,@Stock,@Estado;');
         console.log('Producto actualizado con éxito');
     } catch (error) {
         console.error('Error al actualizar el producto:', error);
