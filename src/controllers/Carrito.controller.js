@@ -4,7 +4,7 @@ import sql from 'mssql';
 export const getCarrito = async () => {
     try {
         const pool = await getconnection();
-        const result = await pool.request().query('SELECT c.cantidad, p.*, ip.img, c.cantidad * p.Precio AS total_producto, SUM(c.cantidad * p.Precio) OVER () AS total_general FROM carrito c INNER JOIN Productos p ON c.idProducto = p.idProducto INNER JOIN img_productos ip ON p.idProducto = ip.idProducto;');
+        const result = await pool.request().query('SELECT * FROM vw_CarritoProductos;');
         return result.recordset;
     } catch (error) {
         console.error('Error al obtener el carrito:', error);
@@ -18,7 +18,7 @@ export const updateCarritoCantidad = async (idProducto, cantidad) => {
         await pool.request()
             .input('idProducto', sql.Int, idProducto)
             .input('Cantidad', sql.Int, cantidad)
-            .query('UPDATE carrito SET Cantidad = @Cantidad WHERE idProducto = @idProducto');
+            .query('sp_ActualizarCantidadCarrito @idProducto, @Cantidad;');
         console.log('Cantidad actualizada correctamente.');
     } catch (error) {
         console.error('Error al actualizar la cantidad:', error);
@@ -31,7 +31,7 @@ export const deleteCarrito = async (idProducto) => {
         const pool = await getconnection();
         await pool.request()
         .input('idProducto', sql.Int, idProducto)
-        .query('DELETE FROM carrito WHERE idProducto = @idProducto');
+        .query('EXEC sp_EliminarProductoCarrito @idProducto;');
         console.log('Producto Eliminado con exito');
     } catch (error) {
         console.error('Error al intentar eliminar el producto', error);
@@ -51,3 +51,4 @@ export const Ventas = async () => {
         throw new Error('Error al ver el historial ' + error.message);
     }
 }
+

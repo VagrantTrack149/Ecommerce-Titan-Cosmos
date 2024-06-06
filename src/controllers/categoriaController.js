@@ -4,7 +4,7 @@ import sql from 'mssql';
 export const getCategorias = async () => {
     try {
         const pool = await getconnection();
-        const result = await pool.request().query('SELECT * FROM categorias');
+        const result = await pool.request().query('SELECT * FROM vw_Categorias;');
         return result.recordset;
     } catch (error) {
         console.error('Error al obtener categorías:', error);
@@ -17,7 +17,7 @@ export const getCategoria = async (id) => {
         const pool = await getconnection();
         const result = await pool.request()
             .input('id', sql.Int, id)
-            .query('SELECT p.*, c.*, ip.img FROM Productos p INNER JOIN Categorias c ON p.idCategoria = c.idCategoria INNER JOIN img_productos ip ON p.idProducto = ip.idProducto WHERE c.idCategoria = @id');
+            .query('EXEC sp_GetProductsByCategory @id;');
         return result.recordset;
     } catch (error) {
         console.error('Error al obtener productos:', error);
