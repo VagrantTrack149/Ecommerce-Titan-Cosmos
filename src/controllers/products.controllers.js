@@ -14,6 +14,18 @@ export const getProductos = async () => {
     }
 };
 
+export const AllProductos = async () => {
+    try {
+        const pool = await getconnection();
+        const result = await pool.request().query('select * from AllProductos;');
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        throw new Error('Error al obtener productos: ' + error.message);
+    }
+};
+
+
 export const getProveedores= async ()=>{
     try {
         const pool = await getconnection();
