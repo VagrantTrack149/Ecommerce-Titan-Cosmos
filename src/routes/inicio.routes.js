@@ -4,8 +4,8 @@ import { Router } from 'express';
 import multer from 'multer';
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
-import { getCategorias, getCategoria } from '../controllers/categoriaController.js';
-import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito, buscarProducto, addProducto, actualizarProducto} from '../controllers/products.controllers.js';
+import { getCategorias, getCategoria, ActualizarCategoria, VerCategoria, addCategoria,ActualizarProveedor,VerProveedor,addProveedor } from '../controllers/categoriaController.js';
+import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito, buscarProducto, addProducto, actualizarProducto, getProveedores} from '../controllers/products.controllers.js';
 import {getCarrito, updateCarritoCantidad, deleteCarrito, Ventas, Ventas_historial, pagar} from '../controllers/Carrito.controller.js'
 
 const router = Router();
@@ -152,7 +152,8 @@ router.get('/historial_ventas', async(req, res) => {
 router.get('/add_producto', async (req, res) => {
     try {
         const categorias = await getCategorias();
-        res.render('add_producto', { categorias });
+        const Proveedor= await getProveedores();
+        res.render('add_producto', { categorias, Proveedor });
     } catch (error) {
         console.error('Error administración:', error);
         res.status(500).send('Error al administrar: ' + error.message);
@@ -167,7 +168,8 @@ router.get('/editar_producto/:idProducto', async (req, res) => {
         const idProducto = req.params.idProducto;
         const producto = await getProducto(idProducto);
         const categorias = await getCategorias();
-        res.render('editar_producto', { producto, categorias });
+        const Proveedor= await getProveedores();
+        res.render('editar_producto', { producto, categorias, Proveedor });
     } catch (error) {
         console.error('Error al editar el producto:', error);
         res.status(500).send('Error al editar el producto: ' + error.message);
@@ -176,15 +178,112 @@ router.get('/editar_producto/:idProducto', async (req, res) => {
 
 router.post('/editar', async (req, res) => {
     try {
-        const {idProducto, Producto, Descripcion, Categoria, Precio, Stock, Estado } = req.body;
+        const {idProducto, Producto, Descripcion, Categoria, Precio, Stock, Estado, idProveedor } = req.body;
         console.log("Print_r: "+JSON.stringify(req.body));
-        await actualizarProducto(idProducto, Producto, Descripcion, Categoria, Precio, Stock, Estado);
+        await actualizarProducto(idProducto, Producto, Descripcion, Categoria, Precio, Stock, Estado, idProveedor);
         res.redirect('/menu_productos');
     } catch (error) {
         console.error('Error al actualizar el producto:', error);
         res.status(500).send('Error al actualizar el producto: ' + error.message);
     }
 });
+
+router.get('/add_categoria', async (req, res) => {
+    try {
+        const categorias = await getCategorias();
+        res.render('add_categoria', { categorias });
+    } catch (error) {
+        console.error('Error administración:', error);
+        res.status(500).send('Error al administrar: ' + error.message);
+    }
+});
+
+router.post('/add_cate', async (req, res) => {
+    try {
+        const categorias = await getCategorias();
+        const {Categoria} = req.body
+        await addCategoria(Categoria);
+        res.redirect('/categoria_Admin');
+    } catch (error) {
+        
+    }
+});
+
+
+router.get('/editar_categoria/:idCategoria', async (req, res) => {
+    try {
+        const idCategoria = req.params.idCategoria;
+        const Categoria = await VerCategoria(idCategoria);
+        const categorias = await getCategorias();
+        res.render('editar_categoria', { idCategoria, Categoria, categorias });
+    } catch (error) {
+        console.error('Error al editar el producto:', error);
+        res.status(500).send('Error al editar el producto: ' + error.message);
+    }
+});
+
+router.post('/editar_cate', async (req, res) => {
+    try {
+        const {idCategoria, Categoria} = req.body;
+        console.log("Print_r: "+JSON.stringify(req.body));
+        await ActualizarCategoria(idCategoria, Categoria);
+        res.redirect('/categoria_Admin');
+    } catch (error) {
+        console.error('Error al actualizar el producto:', error);
+        res.status(500).send('Error al actualizar el producto: ' + error.message);
+    }
+});
+
+
+
+
+router.get('/add_proveedor', async (req, res) => {
+    try {
+        const categorias = await getCategorias();
+        res.render('add_proveedor', { categorias });
+    } catch (error) {
+        console.error('Error administración:', error);
+        res.status(500).send('Error al administrar: ' + error.message);
+    }
+});
+
+router.post('/add_provee', async (req, res) => {
+    try {
+        const {Proveedor, Direccion, Telefono} = req.body
+        await addProveedor(Proveedor, Direccion, Telefono);
+        res.redirect('/Proveedores_Admin');
+    } catch (error) {
+        
+    }
+});
+
+
+router.get('/editar_proveedor/:idProveedor', async (req, res) => {
+    try {
+        const idProveedor = req.params.idProveedor;
+        const Proveedor = await VerProveedor(idProveedor);
+        const categorias = await getCategorias();
+        res.render('editar_proveedor', { idProveedor, Proveedor, categorias });
+    } catch (error) {
+        console.error('Error al editar el producto:', error);
+        res.status(500).send('Error al editar el producto: ' + error.message);
+    }
+});
+
+router.post('/editar_provee', async (req, res) => {
+    try {
+        const {idProveedor, Proveedor,Direccion,Telefono} = req.body;
+        console.log("Print_r: "+JSON.stringify(req.body));
+        await ActualizarProveedor(idProveedor, Proveedor,Direccion,Telefono);
+        res.redirect('/Proveedores_Admin');
+    } catch (error) {
+        console.error('Error al actualizar el producto:', error);
+        res.status(500).send('Error al actualizar el producto: ' + error.message);
+    }
+});
+
+
+
 
 router.get('/imprimir', async (req, res) => {
     try {
@@ -261,5 +360,24 @@ router.get('/descargar', async (req, res) => {
     }
 });
 
+router.get('/categoria_Admin', async(req,res) =>{
+    try {
+        const categorias = await getCategorias();
+        res.render('Menu_categorias',{ categorias });
+        } catch (error) {
+            console.error('Error al obtener datos: ', error);
+            res.status(500).send('Error al obtener datos: '+error.message);
+        }
+});
 
+router.get('/Proveedores_Admin', async(req, res) => {
+    try {
+        const categorias = await getCategorias();
+        const Proveedores = await getProveedores();
+        res.render('Menu_proveedores',{ categorias, Proveedores });
+        } catch (error) {
+            console.error('Error al obtener datos: ', error);
+            res.status(500).send('Error al obtener datos: '+error.message);
+        }
+})
 export default router;

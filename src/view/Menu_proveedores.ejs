@@ -29,27 +29,23 @@
         <% }); %>
     </div>
         <div class="Contenido">
-            <h4>Productos</h4>
-            <a href="/add_producto" id="Actualizar_boton2" style="cursor: pointer;"> Añadir</a>
+            <h4>Proveedores</h4>
+            <a href="/add_proveedor" id="Actualizar_boton2" style="cursor: pointer;"> Añadir</a>
             <table>
                 <tbody>
                 <tr>
-                    <th>Producto:</th>
-                    <th>Descripción:</th>
-                    <th>Cantidad:</th>
-                    <th>Categoria:</th>
                     <th>Proveedor:</th>
+                    <th>Dirrecion:</th>
+                    <th>Telefono:</th>
                     <th>Opciones:</th>
                 </tr>
-                <% productos.forEach(producto => { %>
+                <% Proveedores.forEach(Proveedor => { %>
                 <tr>
-                    <td><%=producto.Producto %></td>
-                    <td><%=producto.Descripcion%></td>
-                    <td><%=producto.Stock%></td>
-                    <td><%=producto.Categoria%></td>
-                    <td><%=producto.Proveedor%></td>
+                    <td><%=Proveedor.Proveedor %></td>
+                    <td><%=Proveedor.dir %></td>
+                    <td><%=Proveedor.tel %></td>
                     <td>
-                        <a href="/editar_producto/<%= producto.idProducto %>" id="Salir" style="cursor: pointer;">Editar</a>
+                        <a href="/editar_proveedor/<%= Proveedor.idProveedor %>" id="Salir" style="cursor: pointer;">Editar</a>
                     </td>
                 </tr>
               <% }) %>

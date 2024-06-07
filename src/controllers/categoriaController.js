@@ -25,6 +25,96 @@ export const getCategoria = async (id) => {
     }
 };
 
+
+export const ActualizarCategoria = async(id,Categoria) => {
+    try {
+        const pool = await getconnection();
+        const result = await pool.request()
+            .input('id', sql.Int, id)
+            .input('Categoria', sql.VarChar(25), Categoria)
+            .query('exec sp_EditarCategoria @id, @Categoria;');
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al actualizar Categoria:', error);
+        throw new Error('Error al actualizar Categoria: ' + error.message);
+    }
+};
+
+
+export const VerCategoria = async(id) => {
+    try {
+        const pool = await getconnection();
+        const result = await pool.request()
+            .input('id', sql.Int, id)
+            .query('SELECT dbo.fn_VerCategoriaPorID(@id) as Categoria');
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al obtener Categoria:', error);
+        throw new Error('Error al obtener Categoria: ' + error.message);
+    }
+};
+
+export const addCategoria = async(Categoria) => {
+    try {
+        const pool = await getconnection();
+        const result = await pool.request()
+            .input('Categoria', sql.VarChar(25), Categoria)
+            .query('EXEC sp_InsertarCategoria @Categoria;');
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al obtener Categoria:', error);
+        throw new Error('Error al obtener Categoria: ' + error.message);
+    }
+};
+////////////////////////////////////////////////7
+
+
+export const ActualizarProveedor = async(id,Proveedor, Direccion, Telefono) => {
+    try {
+        console.log(Proveedor);
+        const pool = await getconnection();
+        const result = await pool.request()
+            .input('id', sql.Int, id)
+            .input('Proveedor', sql.VarChar(60), Proveedor)
+            .input('Direccion', sql.VarChar(60), Direccion)
+            .input('Telefono', sql.VarChar(60), Telefono)
+            .query('exec sp_EditarProveedor @id, @Proveedor,@Direccion, @Telefono;');
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al actualizar Proveedor:', error);
+        throw new Error('Error al actualizar Proveedor: ' + error.message);
+    }
+};
+
+
+export const VerProveedor = async(id) => {
+    try {
+        const pool = await getconnection();
+        const result = await pool.request()
+            .input('id', sql.Int, id)
+            .query('SELECT * FROM dbo.ufn_ProveedorByID(@id); ');
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al obtener Proveedor:', error);
+        throw new Error('Error al obtener Proveedor: ' + error.message);
+    }
+};
+
+export const addProveedor = async(Proveedor, Direccion,Telefono) => {
+    try {
+        const pool = await getconnection();
+        const result = await pool.request()
+            .input('Proveedor', sql.VarChar(60), Proveedor)
+            .input('Direccion', sql.VarChar(100), Direccion)
+            .input('Telefono', sql.VarChar(10), Telefono)
+            .query('exec sp_AgregarProveedor @Proveedor,@Direccion,@Telefono;');
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al obtener Proveedor:', error);
+        throw new Error('Error al obtener Proveedor: ' + error.message);
+    }
+};
+
 //insert
 /*export const nuevoProducto=async (req,res)=>{
     console.log(req.body)

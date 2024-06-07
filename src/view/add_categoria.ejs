@@ -29,32 +29,16 @@
         <% }); %>
     </div>
         <div class="Contenido">
-            <h4>Productos</h4>
-            <a href="/add_producto" id="Actualizar_boton2" style="cursor: pointer;"> Añadir</a>
-            <table>
-                <tbody>
-                <tr>
-                    <th>Producto:</th>
-                    <th>Descripción:</th>
-                    <th>Cantidad:</th>
-                    <th>Categoria:</th>
-                    <th>Proveedor:</th>
-                    <th>Opciones:</th>
-                </tr>
-                <% productos.forEach(producto => { %>
-                <tr>
-                    <td><%=producto.Producto %></td>
-                    <td><%=producto.Descripcion%></td>
-                    <td><%=producto.Stock%></td>
-                    <td><%=producto.Categoria%></td>
-                    <td><%=producto.Proveedor%></td>
-                    <td>
-                        <a href="/editar_producto/<%= producto.idProducto %>" id="Salir" style="cursor: pointer;">Editar</a>
-                    </td>
-                </tr>
-              <% }) %>
-                </tbody>
-            </table>
+            <form action="/add_cate" method="post">
+                <br><br><br>
+                Categoria: &nbsp;
+                <input type="text" class="text" id="Categoria" name="Categoria" placeholder="Nombre de la Categoria" required">
+                <br><br>
+                <br>
+                <button type="submit" id="Actualizar_boton" style="cursor: pointer;">Actualizar producto</button>
+                <br>
+            </form>
+            
         </div>
       <!--cuerpo de la pagina fin-->
       <!--Pagin fin-->
