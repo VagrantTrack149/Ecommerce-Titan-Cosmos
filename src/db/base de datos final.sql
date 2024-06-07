@@ -8,10 +8,17 @@ CREATE TABLE Categoria (
     Categoria VARCHAR(60) NOT NULL
 );
 
+Create table Proveedores(
+	idProveedor int primary key identity,
+	Proveedor varchar(150) not null,
+	dir varchar(150) not null,
+	tel varchar(12) not null
+);
 
 CREATE TABLE Productos (
     idProducto INT PRIMARY KEY IDENTITY,
     idCategoria INT NOT NULL FOREIGN KEY REFERENCES Categoria(idCategoria),
+	idProveedor int not null foreign key references Proveedores(idProveedor),
     Producto VARCHAR(120) NOT NULL,
     Descripcion VARCHAR(MAX) NULL,
     Precio MONEY NOT NULL,
@@ -54,6 +61,7 @@ GROUP BY
     dv.idDetalle, dv.Fecha;
 
 
+
 CREATE PROCEDURE ObtenerDetalleVentaPorIdDetalle
     @idDetalle INT
 AS
@@ -83,15 +91,22 @@ CREATE INDEX idx_DetalleVenta_idProducto ON DetalleVenta(idProducto);
 --CARRITO VISTA
 CREATE VIEW vw_CarritoProductos AS
 SELECT 
-    c.cantidad, 
-    p.*, 
-    ip.img, 
-    c.cantidad * p.Precio AS total_producto, 
-    SUM(c.cantidad * p.Precio) OVER () AS total_general 
+    c.cantidad,
+    p.idProducto,
+    p.idCategoria,
+    p.idProveedor,
+    p.Producto,
+    p.Descripcion,
+    p.Precio,
+    p.Stock,
+    p.Estado,
+    ip.img,
+    c.cantidad * p.Precio AS total_producto,
+    SUM(c.cantidad * p.Precio) OVER () AS total_general
 FROM 
-    carrito c 
+    carrito c
 INNER JOIN 
-    Productos p ON c.idProducto = p.idProducto 
+    Productos p ON c.idProducto = p.idProducto
 INNER JOIN 
     img_productos ip ON p.idProducto = ip.idProducto;
 
@@ -179,12 +194,32 @@ EXEC sp_GetProductsByCategory 1;
 
 --VER PRODUCTOS
 CREATE VIEW vw_RandomProducts AS
-SELECT TOP 12 p.*, ip.img, c.Categoria 
-FROM Productos p 
-INNER JOIN img_productos ip ON p.idProducto = ip.idProducto 
-INNER JOIN Categoria c ON p.idCategoria = c.idCategoria 
-WHERE p.Estado !='Descontinuado'
-ORDER BY NEWID();
+SELECT TOP 6 
+    p.idProducto,
+    p.idCategoria,
+    p.idProveedor,
+    p.Producto,
+    p.Descripcion,
+    p.Precio,
+    p.Stock,
+    p.Estado,
+    ip.img AS Imagen,
+    c.Categoria,
+    pr.Proveedor
+FROM 
+    Productos p 
+INNER JOIN 
+    img_productos ip ON p.idProducto = ip.idProducto 
+INNER JOIN 
+    Categoria c ON p.idCategoria = c.idCategoria 
+INNER JOIN 
+    Proveedores pr ON p.idProveedor = pr.idProveedor
+WHERE 
+    p.Estado != 'Descontinuado'
+ORDER BY 
+    NEWID();
+
+
 
 
 
@@ -194,10 +229,23 @@ SELECT * FROM vw_RandomProducts;
 
 --VER PRODUCTOS OFERTA
 CREATE VIEW vw_ProductosOferta AS
-SELECT p.*, ip.img 
-FROM Productos p 
-INNER JOIN img_productos ip ON p.idProducto = ip.idProducto 
-WHERE Estado = 'Oferta';
+SELECT 
+    p.idProducto,
+    p.idCategoria,
+    p.idProveedor,
+    p.Producto,
+    p.Descripcion,
+    p.Precio,
+    p.Stock,
+    p.Estado,
+    ip.img AS Imagen
+FROM 
+    Productos p 
+INNER JOIN 
+    img_productos ip ON p.idProducto = ip.idProducto 
+WHERE 
+    p.Estado = 'Oferta';
+
 
 SELECT * FROM vw_ProductosOferta;
 
@@ -251,7 +299,7 @@ BEGIN
 END;
 
 
-EXEC sp_BuscarProductos 'texto de b˙squeda';
+EXEC sp_BuscarProductos 'texto de b√∫squeda';
 
 
 --INSERTAR PRODUCTO
@@ -259,6 +307,7 @@ CREATE PROCEDURE sp_InsertarProducto
     @Producto NVARCHAR(120),
     @Descripcion NVARCHAR(MAX),
     @idCategoria INT,
+    @idProveedor INT,
     @Precio MONEY,
     @Stock INT,
     @Estado NVARCHAR(60),
@@ -269,28 +318,58 @@ BEGIN
 
     DECLARE @idProducto INT;
 
-    
-    INSERT INTO Productos (Producto, Descripcion, idCategoria, Precio, Stock, Estado)
-    VALUES (@Producto, @Descripcion, @idCategoria, @Precio, @Stock, @Estado);
+    -- Insertar en la tabla Productos
+    INSERT INTO Productos (Producto, Descripcion, idCategoria, idProveedor, Precio, Stock, Estado)
+    VALUES (@Producto, @Descripcion, @idCategoria, @idProveedor, @Precio, @Stock, @Estado);
 
-    
+    -- Obtener el idProducto reci√©n insertado
     SET @idProducto = SCOPE_IDENTITY();
 
-   
+    -- Insertar en la tabla img_productos
     INSERT INTO img_productos (idProducto, img)
     VALUES (@idProducto, @Imagen);
 END;
 
 
 
+CREATE PROCEDURE sp_EditarCategoria
+    @idCategoria INT,
+    @nuevoNombre VARCHAR(60)
+AS
+BEGIN
+    UPDATE Categoria
+    SET Categoria = @nuevoNombre
+    WHERE idCategoria = @idCategoria;
+END;
+
+exec sp_EditarCategoria 1, 'Computacion'
+
+CREATE FUNCTION fn_VerCategoriaPorID
+(
+    @idCategoria INT
+)
+RETURNS VARCHAR(60)
+AS
+BEGIN
+    DECLARE @Categoria VARCHAR(60);
+
+    SELECT @Categoria = Categoria
+    FROM Categoria
+    WHERE idCategoria = @idCategoria;
+
+    RETURN @Categoria;
+END;
+
+SELECT dbo.fn_VerCategoriaPorID(1) as Categoria
+
 
 --ACTUALIZAR PRODUCTO
-
 CREATE PROCEDURE sp_ActualizarProducto
     @idProducto INT,
     @Producto VARCHAR(120),
     @Descripcion VARCHAR(MAX),
-    @Categoria INT,
+    @idCategoria INT,
+    @idProveedor INT,
     @Precio MONEY,
     @Stock INT,
     @Estado VARCHAR(60)
@@ -299,25 +378,26 @@ BEGIN
     UPDATE Productos
     SET Producto = @Producto,
         Descripcion = @Descripcion,
-        idCategoria = @Categoria,
+        idCategoria = @idCategoria,
+        idProveedor = @idProveedor,
         Precio = @Precio,
         Stock = @Stock,
         Estado = @Estado
     WHERE idProducto = @idProducto;
 END;
 
-EXEC sp_ActualizarProducto 123,'Nuevo nombre del producto','Nueva descripciÛn del producto',  1, 29.99,100,'En Uso';
+EXEC sp_ActualizarProducto 123,'Nuevo nombre del producto','Nueva descripci√≥n del producto',  1, 29.99,100,'En Uso';
 
 
 select * from Categoria
 
--- Insertar la categorÌa 'Computo'
+-- Insertar la categor√≠a 'Computo'
 INSERT INTO Categoria (Categoria) VALUES ('Computo');
 
--- Insertar la categorÌa 'TelefonÌa'
-INSERT INTO Categoria (Categoria) VALUES ('TelefonÌa');
+-- Insertar la categor√≠a 'Telefon√≠a'
+INSERT INTO Categoria (Categoria) VALUES ('Telefon√≠a');
 
--- Insertar la categorÌa 'Accesorios'
+-- Insertar la categor√≠a 'Accesorios'
 INSERT INTO Categoria (Categoria) VALUES ('Accesorios');
 
 
@@ -364,7 +444,7 @@ AS
 BEGIN
     DECLARE @MaxIdDetalle INT;
 
-    -- Obtener el m·ximo valor de idDetalle en DetalleVenta
+    -- Obtener el m√°ximo valor de idDetalle en DetalleVenta
     SELECT @MaxIdDetalle = ISNULL(MAX(idDetalle), 0) FROM DetalleVenta;
 	
     -- Incrementar el valor de @MaxIdDetalle en 1
@@ -375,7 +455,7 @@ BEGIN
     SELECT @MaxIdDetalle, idProducto, Cantidad, GETDATE() 
     FROM Carrito;
 
-    -- Borrar los registros de Carrito despuÈs de pasarlos a DetalleVenta
+    -- Borrar los registros de Carrito despu√©s de pasarlos a DetalleVenta
     DELETE FROM Carrito;
 END;
 GO
@@ -388,3 +468,114 @@ select * from DetalleVenta
 select * from Productos
 
 exec PasarACarrito
+
+
+alter table Productos 
+add idProveedor int foreign key references Proveedores(idProveedor)
+
+
+insert into Proveedores values ('Steren','Avenida siempre viva #314','1234567890')
+
+
+
+update Productos 
+set idProveedor=1
+
+
+delete from Categoria where idCategoria=8
+
+CREATE PROCEDURE sp_InsertarCategoria
+    @NombreCategoria VARCHAR(60)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Categoria (Categoria)
+    VALUES (@NombreCategoria);
+END;
+
+
+
+
+CREATE PROCEDURE sp_AgregarProveedor
+    @NombreProveedor NVARCHAR(100),
+    @Direccion NVARCHAR(100),
+    @Telefono NVARCHAR(20)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Proveedores (Proveedor, dir, tel)
+    VALUES (@NombreProveedor, @Direccion, @Telefono);
+END;
+
+
+
+CREATE PROCEDURE sp_EditarProveedor
+    @IdProveedor INT,
+    @NombreProveedor NVARCHAR(100),
+    @Direccion NVARCHAR(100),
+    @Telefono NVARCHAR(20)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Proveedores
+    SET Proveedor = @NombreProveedor,
+        dir = @Direccion,
+        tel = @Telefono
+    WHERE IdProveedor = @IdProveedor;
+END;
+
+
+
+CREATE FUNCTION dbo.ufn_ProveedorByID (@IdProveedor INT)
+RETURNS TABLE
+AS
+RETURN 
+(
+    SELECT * FROM Proveedores
+    WHERE IdProveedor = @IdProveedor
+);
+
+exec sp_EditarProveedor 1,nombre,dir,tel
+exec sp_AgregarProveedor nombre, dir, tel
+SELECT * FROM dbo.ufn_ProveedorByID(1); 
+
+
+create table Usuarios(
+	idUsuario int primary key identity,
+	Usuario varchar(30) not null,
+	Contra varchar(40) not null
+);
+
+
+insert into Usuarios values ('Admin','123')
+
+
+CREATE VIEW AllProductos AS
+SELECT 
+    p.idProducto,
+    p.idCategoria,
+    p.idProveedor,
+    p.Producto,
+    p.Descripcion,
+    p.Precio,
+    p.Stock,
+    p.Estado,
+    ip.img AS Imagen,
+    c.Categoria,
+    pr.Proveedor
+FROM 
+    Productos p 
+INNER JOIN 
+    img_productos ip ON p.idProducto = ip.idProducto 
+INNER JOIN 
+    Categoria c ON p.idCategoria = c.idCategoria 
+INNER JOIN 
+    Proveedores pr ON p.idProveedor = pr.idProveedor
+WHERE 
+    p.Estado != 'Descontinuado'
+
+
+	select * from AllProductos
