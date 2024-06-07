@@ -14,6 +14,16 @@ export const getProductos = async () => {
     }
 };
 
+export const getProveedores= async ()=>{
+    try {
+        const pool = await getconnection();
+        const result = await pool.request().query('SELECT * FROM Proveedores;');
+        return result.recordset;
+    } catch (error) {
+        console.error('Error al obtener Proveedores:', error);
+        throw new Error('Error al obtener Proveedores: ' + error.message);
+    }
+}
 
 export const getProductos_enoferta = async () => {
     try {
@@ -83,7 +93,7 @@ export const addProducto = async (req, res) => {
         }
 
         try {
-            const { Producto, Descripcion, Categoria, Precio, Stock, Estado } = req.body;
+            const { Producto, Descripcion, Categoria, Precio, Stock, Estado, idProveedor } = req.body;
 
             // Convierte la imagen a base64
             const imagenBase64 = "data:image/jpeg;base64,"+req.file.buffer.toString('base64');
@@ -93,11 +103,12 @@ export const addProducto = async (req, res) => {
                 .input('Producto', sql.NVarChar, Producto)
                 .input('Descripcion', sql.NVarChar, Descripcion)
                 .input('idCategoria', sql.Int, Categoria)
+                .input('idProveedor', sql.Int, idProveedor)
                 .input('Precio', sql.Decimal, Precio)
                 .input('Stock', sql.Int, Stock)
                 .input('Estado', sql.NVarChar, Estado)
                 .input('Imagen', sql.VarChar(sql.MAX), imagenBase64)
-                .query(`EXEC sp_InsertarProducto @Producto,@Descripcion,@idCategoria,@Precio,@Stock,@Estado,@Imagen`);
+                .query(`EXEC sp_InsertarProducto @Producto,@Descripcion,@idCategoria,@idProveedor,@Precio,@Stock,@Estado,@Imagen`);
             res.redirect('/menu_productos'); 
         } catch (error) {
             console.error('Error al registrar el producto:', error);
@@ -106,7 +117,7 @@ export const addProducto = async (req, res) => {
     });
 };
 
-export const actualizarProducto = async (idProducto, Producto, Descripcion, Categoria, Precio, Stock, Estado) => {
+export const actualizarProducto = async (idProducto, Producto, Descripcion, Categoria, Precio, Stock, Estado, idProveedor) => {
     try {
         console.log(idProducto);
         console.log(Producto);
@@ -122,7 +133,8 @@ export const actualizarProducto = async (idProducto, Producto, Descripcion, Cate
             .input('Precio', sql.Decimal(10, 2), Precio)
             .input('Stock', sql.Int, Stock)
             .input('Estado', sql.NVarChar(100), Estado)
-            .query('EXEC sp_ActualizarProducto @idProducto,@Producto,@Descripcion,  @Categoria, @Precio,@Stock,@Estado;');
+            .input('idProveedor', sql.Int, idProveedor)
+            .query('EXEC sp_ActualizarProducto @idProducto,@Producto,@Descripcion,  @Categoria,@idProveedor ,@Precio,@Stock,@Estado;');
         console.log('Producto actualizado con éxito');
     } catch (error) {
         console.error('Error al actualizar el producto:', error);

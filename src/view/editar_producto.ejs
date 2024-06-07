@@ -59,6 +59,13 @@
                     <option value="Oferta" <%= (producto[0].Estado == 'Oferta') ? 'selected' : '' %>>Oferta</option>
                 </select>
                 <br><br>
+                Proveedor: &nbsp; 
+                <select name="idProveedor" id="idProveedor">
+                  <% Proveedor.forEach(proveedor => { %>
+                    <option value="<%= proveedor.idProveedor %>"> <%= proveedor.Proveedor %></option>
+                  <% }) %>   
+                </select>
+                <br><br>
                 <br>
                 <button type="submit" id="Actualizar_boton" style="cursor: pointer;">Actualizar producto</button>
                 <br>
