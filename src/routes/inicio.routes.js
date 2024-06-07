@@ -4,13 +4,37 @@ import { Router } from 'express';
 import multer from 'multer';
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
+import { verificarCredenciales } from "../controllers/Usuario.controller.js";
 import { getCategorias, getCategoria, ActualizarCategoria, VerCategoria, addCategoria,ActualizarProveedor,VerProveedor,addProveedor } from '../controllers/categoriaController.js';
-import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito, buscarProducto, addProducto, actualizarProducto, getProveedores} from '../controllers/products.controllers.js';
+import { getProductos, getProducto, getProductos_enoferta,insertProductoCarrito, buscarProducto, addProducto, actualizarProducto, getProveedores, AllProductos} from '../controllers/products.controllers.js';
 import {getCarrito, updateCarritoCantidad, deleteCarrito, Ventas, Ventas_historial, pagar} from '../controllers/Carrito.controller.js'
 
 const router = Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('imagen');
+
+
+router.get('/login', async(req,res) =>{
+    res.render('login');
+});
+
+router.post('/login_veri', async(req, res) => {
+    try {
+        const { Usuario, Contra } = req.body;
+        const result = await verificarCredenciales(Usuario, Contra);
+        const count = result[0].count;
+
+        if (count === 1) {
+            res.redirect('/');
+        } else {
+            res.send('Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.');
+        }
+    } catch (error) {
+        console.error('Error al verificar las credenciales:', error);
+        res.status(500).send('Error al verificar las credenciales. Por favor, inténtelo de nuevo.');
+    }
+});
+
 
 router.get('/', async (req,res) =>{
     try {
@@ -130,7 +154,7 @@ router.get('/Administracion', async (req, res) => {
 router.get('/menu_productos', async(req, res) => {
     try {
         const categorias = await getCategorias();
-        const productos = await getProductos();
+        const productos = await AllProductos();
         res.render('Menu_producto', {categorias, productos}); 
     } catch (error) {
         console.error('Error adminitracion:', error);
